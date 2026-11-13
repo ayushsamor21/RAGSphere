@@ -1,11 +1,13 @@
-// DEV ONLY: wipes tenants and users, then creates two tenants with mixed roles.
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const config = require('../src/config');
 const Tenant = require('../src/models/Tenant');
 const User = require('../src/models/User');
+const Document = require('../src/models/Document');
+const Chunk = require('../src/models/Chunk');
+const AuditLog = require('../src/models/AuditLog');
 
-const PASSWORD = 'ChangeMe123!'; // dev-only password for all seeded users
+const PASSWORD = 'ChangeMe123!';
 
 const data = [
   {
@@ -29,7 +31,13 @@ const data = [
 
 async function main() {
   await mongoose.connect(config.mongoUri);
-  await Promise.all([Tenant.deleteMany({}), User.deleteMany({})]);
+  await Promise.all([
+    Tenant.deleteMany({}),
+    User.deleteMany({}),
+    Document.deleteMany({}),
+    Chunk.deleteMany({}),
+    AuditLog.deleteMany({}),
+  ]);
   await User.syncIndexes();
 
   const passwordHash = await bcrypt.hash(PASSWORD, 10);

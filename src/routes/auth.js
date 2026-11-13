@@ -7,10 +7,7 @@ const config = require('../config');
 
 const router = express.Router();
 
-// Used so a wrong tenant/email costs the same time as a wrong password,
-// which makes it harder to probe which accounts exist.
 const DUMMY_HASH = bcrypt.hashSync('not-a-real-password', 10);
-
 const INVALID = { error: 'Invalid credentials' };
 
 router.post('/login', async (req, res, next) => {

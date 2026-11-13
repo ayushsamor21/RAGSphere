@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const ROLES = ['admin', 'manager', 'employee'];
+const KNOWN_GROUPS = ['hr', 'finance'];
 
 const userSchema = new mongoose.Schema(
   {
@@ -13,14 +14,16 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: true, lowercase: true, trim: true },
     passwordHash: { type: String, required: true, select: false },
     role: { type: String, enum: ROLES, required: true, default: 'employee' },
-    // Cross-cutting access labels, e.g. "hr", "finance".
     groups: { type: [String], default: [] },
   },
   { timestamps: true }
 );
 
-// Email is unique PER TENANT, not globally.
 userSchema.index({ tenantId: 1, email: 1 }, { unique: true });
 
-module.exports = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;
+module.exports.User = User;
 module.exports.ROLES = ROLES;
+module.exports.KNOWN_GROUPS = KNOWN_GROUPS;

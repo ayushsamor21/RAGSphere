@@ -1,0 +1,15 @@
+{
+  "name": "chunks_vector_index",
+  "type": "vectorSearch",
+  "definition": {
+    "fields": [
+      { "type": "vector", "path": "embedding", "numDimensions": 768, "similarity": "cosine" },
+      { "type": "filter", "path": "tenantId" },
+      { "type": "filter", "path": "documentId" },
+      { "type": "filter", "path": "acl.visibility" },
+      { "type": "filter", "path": "acl.allowedRoles" },
+      { "type": "filter", "path": "acl.allowedGroups" },
+      { "type": "filter", "path": "acl.allowedUsers" }
+    ]
+  }
+}
